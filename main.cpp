@@ -1,5 +1,5 @@
 /*
-* Japanese Document : http://ideone.com/K7suA
+* LED Cubeのプログラムです。mbed用。
 */
 
 #include "mbed.h"
@@ -21,10 +21,10 @@ using namespace std;
 LocalFileSystem local("local");
 
 /* pin */
-DigitalOut rck(p19);    //Shift Register Latch Clock
-DigitalOut sck(p20);    //Shift Register Serial Clock
-BusOut led(p21,p22,p23,p24,p25,p26,p27,p28);    //Shift Register IN
-BusOut gnd(p11,p12,p13,p14,p15,p16,p17,p18);    //GND pin
+DigitalOut rck(p19);    //シフトレジスタのラッチクロック
+DigitalOut sck(p20);    //シフトレジスタのシリアルクロック
+BusOut led(p21,p22,p23,p24,p25,p26,p27,p28);    //シフトレジスタのシリアルinピン
+BusOut gnd(p11,p12,p13,p14,p15,p16,p17,p18);    //グランドpin
 //DigitalIn sw(p10);  //ON OFF Switch
 
 DigitalOut led1(LED1);
@@ -32,11 +32,11 @@ DigitalOut led2(LED2);
 DigitalOut led3(LED3);
 DigitalOut led4(LED4);
 
-/* fanctions */
+/* functions */
 vector<char*> FileNameRead();
 inline void LEDout(uint8_t*);
 
-/* Memory Allocate */
+/*シリアル入力やethernetの領域を確保し、あらかじめその領域に保存することにより、高速なLEDの点灯を可能にします */
 uint8_t DATA[16384] __attribute__((section("AHBSRAM0"))); //serial USB memory area
 uint8_t DATA1[16384] __attribute__((section("AHBSRAM1")));//ethernet memory area
 
@@ -83,7 +83,7 @@ int main(){
     
     /*while(sw)*/
     while(1){
-        //randomize
+        //ランダムに並び替えます
         random_shuffle(rl,rl+filenames.size());
         for(int i=0;i<filenames.size();++i){
         
@@ -131,7 +131,7 @@ int main(){
     //return 0;
 }
 
-
+//filename.txtの内容を読み込み、ファイルのリストを返します
 vector<char*> FileNameRead(){
     ifstream fp("/local/filename.txt",ifstream::in);
     vector<char*> data;
@@ -152,7 +152,7 @@ vector<char*> FileNameRead(){
     return data;
 }
 
-//Output data   (assert(sizeof(LED) == 64))
+//データを出力します。LEDは配列で、その大きさは64でなければいけません。
 inline void LEDout(uint8_t *LED){
     for(int k = 0; k < 2; ++k){
         for(int i = 0; i < 8; ++i){
