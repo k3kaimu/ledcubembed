@@ -23,8 +23,8 @@ LocalFileSystem local("local");
 /* pin */
 DigitalOut rck(p19);    //シフトレジスタのラッチクロック
 DigitalOut sck(p20);    //シフトレジスタのシリアルクロック
-BusOut led(p21,p22,p23,p24,p25,p26,p27,p28);    //シフトレジスタのシリアルinピン
-BusOut gnd(p11,p12,p13,p14,p15,p16,p17,p18);    //グランドpin
+BusOut led(p21, p22, p23, p24, p25, p26, p27, p28);    //シフトレジスタのシリアルinピン
+BusOut gnd(p11, p12, p13, p14, p15, p16, p17, p18);    //グランドpin
 //DigitalIn sw(p10);  //ON OFF Switch
 
 DigitalOut led1(LED1);
@@ -62,14 +62,14 @@ int main(){
     cout << "Done FileRead!" << ENDL;
     
     vector<char*>::iterator it = filenames.begin();
-    for(int i=0;it!=filenames.end();++it,++i)
+    for(int i=0; it != filenames.end(); ++it, ++i)
         cout << i << " : " << *it << ENDL;
     
     led3 = 0;
     led4 = 1;
     
     led = 0;
-    for(int i=0;i<8;++i)
+    for(int i = 0; i < 8; ++i)
         CLK(sck);
     CLK(rck);
     
@@ -78,19 +78,19 @@ int main(){
     //random list
     int *rl;
     rl = new int[filenames.size()];
-    for(int i=0;i<filenames.size();++i)
+    for(int i=0; i < filenames.size(); ++i)
         rl[i] = i;
     
     /*while(sw)*/
     while(1){
         //ランダムに並び替えます
-        random_shuffle(rl,rl+filenames.size());
-        for(int i=0;i<filenames.size();++i){
+        random_shuffle(rl, rl + filenames.size());
+        for(int i=0; i < filenames.size(); ++i){
         
             vector<uint16_t> fileflame_s;
             
             FILE *fp;
-            fp = fopen(filenames[rl[i]],"rb");
+            fp = fopen(filenames[rl[i]], "rb");
             if(fp == NULL){
                 cout << "Not Found : Data File :" << filenames[rl[i]] << ENDL;
                 //exit(-1);
@@ -102,17 +102,17 @@ int main(){
             for(int i=0;i < 512;++i){
                 uint16_t f;
                 
-                if(fread(&f,sizeof(uint16_t),1,fp) != 1)
+                if(fread(&f, sizeof(uint16_t), 1, fp) != 1)
                     break;
-                if(fread(DATA+i*64,sizeof(uint8_t),64,fp) != 64)
+                if(fread(DATA+i*64, sizeof(uint8_t), 64, fp) != 64)
                     break;    
                     
                 fileflame_s.push_back(f);
             }
             led1 = 0;
             //cout << filenames[rl[i]] << ENDL;
-            for(int i=0;i< (fileflame_s.size() - 1);++i)
-                for(int j = fileflame_s[i];j < fileflame_s[i+1]; ++j)
+            for(int i = 0; i < (fileflame_s.size() - 1); ++i)
+                for(int j = fileflame_s[i]; j < fileflame_s[i+1]; ++j)
                     LEDout(DATA+i*64);
                     
             LEDout(DATA + (fileflame_s.size() - 1)*64);
@@ -120,7 +120,7 @@ int main(){
             cout << t << ENDL;
             
             led = 0;
-            for(int i=0;i<8;++i)
+            for(int i = 0; i < 8; ++i)
                 CLK(sck);
             CLK(rck);
             
