@@ -85,7 +85,7 @@ int main(){
     while(1){
         //ランダムに並び替えます
         random_shuffle(rl, rl + filenames.size());
-        for(int i=0; i < filenames.size(); ++i){
+        for(int i = 0; i < filenames.size(); ++i){
         
             vector<uint16_t> fileflame_s;
             
@@ -99,7 +99,7 @@ int main(){
             
             cout << "Start : " << filenames[rl[i]] << ENDL;
             led1 = 1;
-            for(int i=0;i < 512;++i){
+            for(int i = 0; i < 512; ++i){
                 uint16_t f;
                 
                 if(fread(&f, sizeof(uint16_t), 1, fp) != 1)
