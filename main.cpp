@@ -184,7 +184,7 @@ int main()
             fclose(fp);
 
             // 現在のフレームidxと次のidxとの2つは最低必要
-            if(frameIdx.size() <= 1)
+            if(frameIdxs.size() <= 1)
                 continue;
 
             led1 = 0;
